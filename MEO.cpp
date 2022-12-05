@@ -1,8 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <time.h>
 using namespace std;
-
+const int N = 100000; // Liczebność zbioru
+clock_t start,stop;
+double czas;
 
 void Merge(int tab[], int l,int m, int r) // dane pobierane z tabeli z czesci main
 {
@@ -12,7 +15,7 @@ void Merge(int tab[], int l,int m, int r) // dane pobierane z tabeli z czesci ma
 	int j=m+1; //pierwszy element prawej tablicy
 	int k=l; //początkowy element tablicy tymczasowej
 	
-	int tym[11]; // wielkosc tab = mytab
+	int tym[N]; // wielkosc tab = mytab
 		
 	while (i<=m && j<=r) // petla wykonuje sie dopoki pierwsze el.
 	// 2 tablic dojda do do końca swojego rozmiaru
@@ -69,8 +72,19 @@ void mergesort(int tab[],int l, int r) {
 int main()
 
 {
+	cout <<"Wczytywanie z pliku (1)" << endl;
+	cout <<"Losowe generowanie (2)" << endl;
+
+		int wybor;
+	cout <<"Wybierz metode" << endl;
+	cin >> wybor;
+
+	switch (wybor) { // wybór metody wprowadzania
+	
+	case 1: { //metoda pierwsza
+		
 		fstream plik;
-		plik.open("sort.txt", ios::in | ios::out | ios::binary); //zapisywanie z pliku
+		plik.open("sort.txt", ios::out | ios::in); //zapisywanie z pliku
 		//plik1.open ("sort2.txt",ios::out); // otwiera zapis do pliku
 		int Alen=0;
 		string linia;  //dlugosc tablicy wyliczona 
@@ -80,15 +94,10 @@ int main()
 		int mytab[Alen]	= {0}; // tworzy tabele o nazwie z o długości Alen
 		int numery = 0;
 		while (getline(plik,linia)) { //dzięki funkcji getline czytamy pokolei wiersze w pliku
-			mytab[numery++] = atoi(linia.c_str()); //zmienia string na int
+			mytab[numery++] = atoi(linia.c_str()); //zmienia string na int	
 		}
-
 cout<<"Pobieram " << Alen << " liczb"<<endl;
 mytab[Alen];
-//for (int i=0;i<Alen;i++) 
-//{
-//	cin>>mytab[i];
-//}
 cout <<"Przed sortowaniem przez scalanie: "<<endl;
 plik << "Przed sortowaniem przez scalanie: "<< endl;
 for (int i=0;i<Alen;i++) 
@@ -96,18 +105,66 @@ for (int i=0;i<Alen;i++)
 	plik<<mytab[i]<<" ";
 	cout<<mytab[i]<<" "; // wypisz tablice podaną przez użytkownika
 }
-	
+cout << "\n";
+
+	start = clock(); //start mierzenia czasu
 //wykonaj funkcje mergesort - dzielenia tablicy
 mergesort(mytab,0,Alen-1);
+		stop =clock();
+
+		czas = (double) (stop - start) / CLOCKS_PER_SEC; //cykle czasu
 		
+
 cout <<"Po sortowaniu przez scalanie: "<<endl;
 plik << "Twoje liczby po sortowaniu"<< endl;
+cout << endl<<"Czas sortowania przez scalanie: "<<czas<<" s"<<endl;
 for (int i=0;i<Alen;i++) 
 {
-	plik<<mytab[i]<<" ";
 	cout<<mytab[i]<<" ";  // wypisz posortowaną tablice
+	plik<<mytab[i]<<" ";
 }	
-plik.close(); // zamkij zapis do pliku
+plik.close(); // zamkij zapis do pliku	
+		break;
+	}
+		
+		case 2:{ // metoda druga
+			fstream plik; // tworzy plik
+		plik.open ("sort2.txt",ios::out); // otwiera zapis do pliku
+int mytab[N];
+			
+			for(int i = 0; i < N; i++) mytab[i] = rand() % 10000;		//losowanie liczb 
+			cout<<"Pobieram " << N << " liczb"<<endl;
+
+cout <<"Przed sortowaniem przez scalanie: "<<endl;
+plik << "Przed sortowaniem przez scalanie: "<< endl;
+for (int i=0;i<N;i++) 
+{	
+	plik<<mytab[i]<<" ";
+	cout<<mytab[i]<<" "; // wypisz tablice podaną przez użytkownika
+}
+cout << "\n";
+
+
+	start = clock(); //start mierzenia czasu
+//wykonaj funkcje mergesort - dzielenia tablicy
+mergesort(mytab,0,N-1);
+		stop =clock();
+
+		czas = (double) (stop - start) / CLOCKS_PER_SEC; //cykle czasu
+				
+cout <<"Po sortowaniu przez scalanie: "<<endl;
+plik << "Twoje liczby po sortowaniu"<< endl;
+cout << endl<<"Czas sortowania przez scalanie: "<<czas<<" s"<<endl;
+
+for (int i=0;i<N;i++) 
+{
+	cout<<mytab[i]<<" ";  // wypisz posortowaną tablice
+	plik<<mytab[i]<<" ";
+}	
+plik.close(); // zamkij zapis do pliku		
+			break;
+		}	
+}
 	return 0;
 }
 
