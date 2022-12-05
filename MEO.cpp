@@ -2,10 +2,12 @@
 #include <fstream>
 #include <cstdlib>
 using namespace std;
-//const int N = 10; // liczebność zbioru
+
 
 void Merge(int tab[], int l,int m, int r) // dane pobierane z tabeli z czesci main
 {
+	
+	
 	int i=l; // pierwszy element lewej tablicy
 	int j=m+1; //pierwszy element prawej tablicy
 	int k=l; //początkowy element tablicy tymczasowej
@@ -67,30 +69,31 @@ void mergesort(int tab[],int l, int r) {
 int main()
 
 {
-		ifstream plik;
-		plik.open("sort.txt", ios::in); //zapisywanie z pliku
+		fstream plik;
+		plik.open("sort.txt", ios::in | ios::out | ios::binary); //zapisywanie z pliku
+		//plik1.open ("sort2.txt",ios::out); // otwiera zapis do pliku
 		int Alen=0;
 		string linia;  //dlugosc tablicy wyliczona 
 		while(getline(plik, linia)){Alen++;} //poprzez zliczenie linijek wierszy
 		plik.clear();  // czyści flagi na otwarciu pliku
 		plik.seekg(0,plik.beg); // wstawianie kursora na początek pliku
-		int z[Alen]	= {0}; // tworzy tabele o nazwie z o długości Alen
+		int mytab[Alen]	= {0}; // tworzy tabele o nazwie z o długości Alen
 		int numery = 0;
 		while (getline(plik,linia)) { //dzięki funkcji getline czytamy pokolei wiersze w pliku
-			z[numery++] = atoi(linia.c_str()); //zmienia string na int
+			mytab[numery++] = atoi(linia.c_str()); //zmienia string na int
 		}
 
 cout<<"Pobieram " << Alen << " liczb"<<endl;
-int mytab[Alen];
-for (int i=0;i<Alen;i++) 
-{
-	cin>>mytab[i];
-}
+mytab[Alen];
+//for (int i=0;i<Alen;i++) 
+//{
+//	cin>>mytab[i];
+//}
 cout <<"Przed sortowaniem przez scalanie: "<<endl;
-//plik << "Przed sortowaniem przez scalanie: "<< endl;
+plik << "Przed sortowaniem przez scalanie: "<< endl;
 for (int i=0;i<Alen;i++) 
 {	
-//	plik<<mytab[i]<<" ";
+	plik<<mytab[i]<<" ";
 	cout<<mytab[i]<<" "; // wypisz tablice podaną przez użytkownika
 }
 	
@@ -98,10 +101,10 @@ for (int i=0;i<Alen;i++)
 mergesort(mytab,0,Alen-1);
 		
 cout <<"Po sortowaniu przez scalanie: "<<endl;
-//plik << "Twoje liczby po sortowaniu"<< endl;
+plik << "Twoje liczby po sortowaniu"<< endl;
 for (int i=0;i<Alen;i++) 
 {
-	//plik<<mytab[i]<<" ";
+	plik<<mytab[i]<<" ";
 	cout<<mytab[i]<<" ";  // wypisz posortowaną tablice
 }	
 plik.close(); // zamkij zapis do pliku
