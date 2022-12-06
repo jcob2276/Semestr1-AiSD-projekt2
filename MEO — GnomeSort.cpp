@@ -3,21 +3,21 @@
 #include <cstdlib>
 #include <time.h>
 using namespace std;
-const int N = 100000; // Liczebność zbioru
+const int N = 1000; // Liczebność zbioru
 clock_t start,stop;
 double czas;
 
 
-void GnomeSort(int tab[]) {
+void GnomeSort(int tab[],int r) {
 	int i = 0;
-	while (i<N){
-		if (i==0)i++;
-		else if(tab[i] > tab[i-1]) i++;
-		else {
-		
-		int const j = tab[i];
+	
+	while (i<r){
+		if (i==0) i++;
+		if(tab[i] >= tab[i-1]) i++;
+	else {
+		const int j = tab[i];
 		tab[i] = tab[i-1];
-		tab[i-j] = tab[i];
+		tab[i-1] = j;
 		i--; 
 	}	
 	}
@@ -25,12 +25,9 @@ void GnomeSort(int tab[]) {
 
 void Merge(int tab[], int l,int m, int r) // dane pobierane z tabeli z czesci main
 {
-	
-	
 	int i=l; // pierwszy element lewej tablicy
 	int j=m+1; //pierwszy element prawej tablicy
 	int k=l; //początkowy element tablicy tymczasowej
-	
 	int tym[N]; // wielkosc tab = mytab
 		
 	while (i<=m && j<=r) // petla wykonuje sie dopoki pierwsze el.
@@ -110,12 +107,12 @@ int main()
 		int mytab[Alen]	= {0}; // tworzy tabele o nazwie z o długości Alen
 		int numery = 0;
 		while (getline(plik,linia)) { //dzięki funkcji getline czytamy pokolei wiersze w pliku
-			mytab[numery++] = atoi(linia.c_str()); //zmienia string na int	
+		mytab[numery++] = atoi(linia.c_str()); //zmienia string na int	
 		}
 cout<<"Pobieram " << Alen << " liczb"<<endl;
 mytab[Alen];
-cout <<"Przed sortowaniem przez scalanie: "<<endl;
-plik << "Przed sortowaniem przez scalanie: "<< endl;
+cout <<"Liczby przed sortowaniem: "<<endl;
+plik << "Liczby przed sortowaniems: "<< endl;
 for (int i=0;i<Alen;i++) 
 {	
 	plik<<mytab[i]<<" ";
@@ -126,57 +123,79 @@ cout << "\n";
 	start = clock(); //start mierzenia czasu
 //wykonaj funkcje mergesort - dzielenia tablicy
 mergesort(mytab,0,Alen-1);
+
 		stop =clock();
 
 		czas = (double) (stop - start) / CLOCKS_PER_SEC; //cykle czasu
-		
 
 cout <<"Po sortowaniu przez scalanie: "<<endl;
 plik << "Twoje liczby po sortowaniu"<< endl;
-cout << endl<<"Czas sortowania przez scalanie: "<<czas<<" s"<<endl;
+
 for (int i=0;i<Alen;i++) 
 {
 	cout<<mytab[i]<<" ";  // wypisz posortowaną tablice
 	plik<<mytab[i]<<" ";
 }	
+cout << endl<<"Czas sortowania przez scalanie: "<<czas<<" s"<<endl;
+
+
 plik.close(); // zamkij zapis do pliku	
 		break;
 	}
-		
 		case 2:{ // metoda druga
 			fstream plik; // tworzy plik
-		plik.open ("sort2.txt",ios::out); // otwiera zapis do pliku
-int mytab[N];
+	plik.open ("sort2.txt",ios::out); // otwiera zapis do pliku
+	int mytab[N];
+	int mytab2[N];
 			
-			for(int i = 0; i < N; i++) mytab[i] = rand() % 10000;		//losowanie liczb 
-			cout<<"Pobieram " << N << " liczb"<<endl;
+		for(int i = 0; i < N; i++) mytab[i] = rand() % 10000;
+		for (int i=0; i< N; i++) mytab2[i]= mytab[i];
+				//losowanie liczb 
+		cout<<"Pobieram " << N << " liczb"<<endl;
 
-cout <<"Przed sortowaniem przez scalanie: "<<endl;
-plik << "Przed sortowaniem przez scalanie: "<< endl;
-for (int i=0;i<N;i++) 
+		cout <<"Przed sortowaniem przez scalanie: "<<endl;
+		plik << "Przed sortowaniem przez scalanie: "<< endl;
+	for (int i=0;i<N;i++) 
 {	
 	plik<<mytab[i]<<" ";
 	cout<<mytab[i]<<" "; // wypisz tablice podaną przez użytkownika
 }
 cout << "\n";
 
-
 	start = clock(); //start mierzenia czasu
 //wykonaj funkcje mergesort - dzielenia tablicy
-mergesort(mytab,0,N-1);
+//mergesort(mytab,0,N-1);
+GnomeSort(mytab,N);
 		stop =clock();
-
 		czas = (double) (stop - start) / CLOCKS_PER_SEC; //cykle czasu
 				
 cout <<"Po sortowaniu przez scalanie: "<<endl;
 plik << "Twoje liczby po sortowaniu"<< endl;
-cout << endl<<"Czas sortowania przez scalanie: "<<czas<<" s"<<endl;
+
 
 for (int i=0;i<N;i++) 
 {
-	cout<<mytab[i]<<" ";  // wypisz posortowaną tablice
-	plik<<mytab[i]<<" ";
+	cout<<mytab2[i]<<" ";  // wypisz posortowaną tablice
+	plik<<mytab2[i]<<" ";
+}
+cout << endl<<"Czas sortowania przez scalanie: "<<czas<<" s"<<endl;
+
+GnomeSort(mytab,N);
+
+start = clock(); //start mierzenia czasu
+		stop =clock();
+czas = (double) (stop - start) / CLOCKS_PER_SEC; //cykle czasu
+
+cout <<"Po sortowaniu Gnoma: "<<endl;
+plik << "Twoje liczby po sortowaniu"<< endl;
+
+for (int i=0;i<N;i++) 
+{
+	cout<<mytab2[i]<<" ";  // wypisz posortowaną tablice
+	plik<<mytab2[i]<<" ";
 }	
+cout << endl<<"Czas sortowania Gnoma: "<<czas<<" s"<<endl;
+	
 plik.close(); // zamkij zapis do pliku		
 			break;
 		}	
